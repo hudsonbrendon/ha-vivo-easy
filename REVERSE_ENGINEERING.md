@@ -138,3 +138,13 @@ Podem precisar de ajuste fino com captura real.
 `adherence/purchase/pix`, `migrations/*`, `roaming/*`, `shopping-cart`,
 `purchase-limit`. A lista completa (~110 endpoints, verbo + path + retorno +
 headers) foi extraída de `f4/a.java` e `f4/b.java`.
+
+## Correção de login (23/10/2026)
+
+O login por senha é `AuthHelper.startAuthCredentials(number, senha)` =
+`AuthCredentials{number, password: generateHash(senha)}` — manda o campo
+**`password`** (PBKDF2), **sem** o campo `hash`. O `generateAuthToken` é só do
+fluxo de auto-login por parceiro. Confirmado ao vivo: com o campo `hash` o
+servidor devolve `Chave inválida`; com `password=generateHash` ele aceita e só
+valida a senha (`INVALID_PASSWORD` quando errada). O número funciona com ou sem
+o prefixo 55.

@@ -148,10 +148,15 @@ class VivoEasyApiClient:
             self._uid = uid
 
     async def async_login(self) -> None:
-        """POST authenticate; captura o token rotativo inicial."""
+        """POST authenticate; captura o token rotativo inicial.
+
+        O login por senha (AuthHelper.startAuthCredentials) manda
+        `password` = generate_hash(senha) (PBKDF2); NAO o campo `hash`
+        (esse e do fluxo de auto-login por parceiro).
+        """
         credentials = {
             "number": self._msisdn,
-            "hash": generate_auth_token(self._msisdn, self._password),
+            "password": generate_hash(self._password),
             "deviceId": self._device_id,
             "deviceToken": "",
         }
