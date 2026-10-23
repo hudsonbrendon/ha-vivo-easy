@@ -1,0 +1,35 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Vivo Easy",
+        "description": "Enter your Vivo Easy line number (with area code) and the app password.",
+        "data": {
+          "msisdn": "Line number (e.g. 5531999999999)",
+          "password": "Vivo Easy app password"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to Vivo Easy.",
+      "invalid_auth": "Invalid number or password.",
+      "unknown": "Unexpected error."
+    },
+    "abort": {
+      "already_configured": "This line is already configured."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "consumption": { "name": "Consumption" },
+      "wallet": { "name": "Wallet" },
+      "coupons": { "name": "Coupons" },
+      "prime_plan": { "name": "Easy Prime plan" },
+      "prime_next_charge": { "name": "Next charge" },
+      "prime_expiration": { "name": "Subscription expiration" }
+    },
+    "binary_sensor": {
+      "line_active": { "name": "Line active" }
+    }
+  }
+}

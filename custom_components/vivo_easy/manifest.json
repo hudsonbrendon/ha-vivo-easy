@@ -1,0 +1,14 @@
+{
+  "domain": "vivo_easy",
+  "name": "Vivo Easy",
+  "codeowners": [
+    "@hudsonbrendon"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/hudsonbrendon/ha-vivo-easy",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/hudsonbrendon/ha-vivo-easy/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}

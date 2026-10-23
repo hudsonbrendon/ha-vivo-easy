@@ -1,0 +1,35 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Vivo Easy",
+        "description": "Entre com o número da sua linha Vivo Easy (com DDD) e a senha do app.",
+        "data": {
+          "msisdn": "Número da linha (ex: 5531999999999)",
+          "password": "Senha do app Vivo Easy"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Falha ao conectar no Vivo Easy.",
+      "invalid_auth": "Número ou senha inválidos.",
+      "unknown": "Erro inesperado."
+    },
+    "abort": {
+      "already_configured": "Essa linha já está configurada."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "consumption": { "name": "Consumo" },
+      "wallet": { "name": "Carteira" },
+      "coupons": { "name": "Cupons" },
+      "prime_plan": { "name": "Plano Easy Prime" },
+      "prime_next_charge": { "name": "Próxima cobrança" },
+      "prime_expiration": { "name": "Expiração da assinatura" }
+    },
+    "binary_sensor": {
+      "line_active": { "name": "Linha ativa" }
+    }
+  }
+}
