@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+import asyncio
 from datetime import timedelta
 from typing import TYPE_CHECKING, Any
 
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.util import dt as dt_util
 
 from .api import (
     VivoEasyApiAuthenticationError,
@@ -53,16 +55,31 @@ class VivoEasyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             raise UpdateFailed(str(err)) from err
 
     async def _fetch_all(self) -> dict[str, Any]:
+        # O dashboard é obrigatório; o resto é complementar e tolera falha.
         dashboard = await self.client.async_get_dashboard()
-        # Prime e status da linha são complementares: se falharem, seguem vazios.
-        prime: dict[str, Any] | None = None
-        line: dict[str, Any] | None = None
-        try:
-            prime = await self.client.async_get_prime_status()
-        except VivoEasyApiError as err:
-            LOGGER.debug("prime status indisponível: %s", err)
-        try:
-            line = await self.client.async_get_line_status()
-        except VivoEasyApiError as err:
-            LOGGER.debug("line status indisponível: %s", err)
-        return {"dashboard": dashboard, "prime": prime, "line": line}
+        now = dt_util.now()
+        complementary = {
+            "prime": self.client.async_get_prime_status(),
+            "line": self.client.async_get_line_status(),
+            "client": self.client.async_get_client(),
+            "renewals": self.client.async_get_renewals(),
+            "overbalance": self.client.async_get_overbalance(),
+            "mgm": self.client.async_get_mgm(),
+            "internet_catalog": self.client.async_get_internet_catalog(),
+            "daily_catalog": self.client.async_get_daily_catalog(),
+            "notifications": self.client.async_get_notifications(),
+            "purchase_history": self.client.async_get_purchase_history(
+                now.year, now.month
+            ),
+        }
+        data: dict[str, Any] = {"dashboard": dashboard}
+        results = await asyncio.gather(
+            *complementary.values(), return_exceptions=True
+        )
+        for key, result in zip(complementary, results, strict=True):
+            if isinstance(result, Exception):
+                LOGGER.debug("%s indisponível: %s", key, result)
+                data[key] = None
+            else:
+                data[key] = result
+        return data

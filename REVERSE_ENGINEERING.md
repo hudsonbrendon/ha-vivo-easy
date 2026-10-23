@@ -47,15 +47,21 @@ Mapa de headers de device (`DeviceUtils.generateDeviceHeaders`) acompanha o POST
 Resposta: `AuthResponse { number, customerId, clientId, mustMigrateSoon }` +
 headers `x-access-token` / `x-uid`.
 
-## Primitivos de crypto (`br.com.zup.vivoeasy3.utils.Utils`)
+## Primitivos de crypto (`Utils.java` / `SecurityUtils.java`)
 
 Portados em `custom_components/vivo_easy/api.py` e verificados em
 `tests/test_crypto.py`:
 
 - `generateAuthToken(msisdn, senha)` = `base64("{msisdn}&@#!&{senha}&@#!&GG_IZI")`
+  (campo `hash` do `AuthCredentials` no login).
 - `hashMsisdn(msisdn)` = `sha256(msisdn + ",s)S.X-p;SdwsA2&lR.dIy|SCg}bZ1{&7y^%kpk2u9V+{mEO%n3HccBYJIKhFujb")`
 - `solveHashcash(ch)`: `n = int(ch.split(":")[0])`; acha `i` tal que
   `sha256("{ch}:{i}")` (hex) comece com `n` zeros; retorna `"{ch}:{i}"`.
+- `SecurityUtils.generateHash(senha)` = **PBKDF2-HMAC-SHA1**(senha,
+  salt `a,0,2,b,3,q,1,l,o,4,7,8,c,9,01,02`, 1000 iterações, dkLen 64 bytes) em
+  hex (128 chars). É o valor do header **`x-auth-pwd`** exigido nas ações
+  sensíveis (compra, renovação, cancelamento, troca de cartão). Confirmado em
+  `CheckoutFragment`/`DashboardFragment`: `generateHash(AuthPreferences.restore().getPassword())`.
 
 As libs nativas `libsigner`/`libmcrypt`/`libdigest` são do SDK antifraude
 **Topaz** (`br.com.topaz.heartbeat`, fingerprint/RASP) e **não** são exigidas
@@ -92,9 +98,43 @@ requisições do gateway.
 
 `status` (enum), `foreign`, `fwa`, `migrationFlow`, `mustAuthenticate`, `paymentId`.
 
-## Outros endpoints mapeados (não usados, apenas referência)
+## Leituras complementares usadas (coordinator, best-effort)
+
+| Endpoint | Retorno | Sensor |
+|---|---|---|
+| `GET clients` | `Client` | Titular (nome, cpf mascarado, plano, email) |
+| `GET renewals` | `Renewals` | Renovações automáticas (+ componentId) |
+| `GET adherence/{msisdn}/overbalance` | `OverBalance` | Saldo extra |
+| `GET mgm/client/v2` | `InfoMgm` | Indique e ganhe (código, usos) |
+| `GET catalogs/clients/addons/internet/v2` | `CatalogInternet` | catálogo p/ compra |
+| `GET catalogs/clients/addons/daily/v2` | `CatalogApps` | catálogo p/ compra |
+| `GET notifications/q` | `NotificationResponse` | Notificações |
+| `GET purchase-history/{ano}/{mes}/v3` | `Shopping` | Compras do mês |
+
+## Ações expostas como serviços HA (escrita)
+
+Enviam `x-auth-pwd` (= `generateHash(senha)`) e resolvem hashcash sob desafio.
+
+| Serviço | Endpoint | Headers |
+|---|---|---|
+| `comprar_pacote` | `POST purchases` | x-auth-pwd |
+| `ativar_renovacao` | `POST renewals/v2` | x-auth-pwd, x-hashcash |
+| `cancelar_renovacao` | `DELETE renewals/{componentId}` | x-auth-pwd |
+| `renovar_prime` | `POST purchases/renew-prime` | x-auth-pwd, x-hashcash |
+| `reativar_prime` | `PUT primes/client/reactivation` | x-auth-pwd, x-hashcash |
+| `avaliar_app` | `POST clients/rating-app` | — |
+| `agendar_cancelamento_linha` | `POST retention/schedule-line-cancellation` | x-auth-pwd (exige `confirmar`) |
+| `cancelar_linha` | `POST retention/v2/cancel-line` | x-auth-pwd (irreversível, exige `confirmar`) |
+
+Corpos de `purchases`/`renewals/v2` inferidos dos DTOs (`PurchaseRequest`:
+`offerId`, `offers[]`, `couponCode`, `paymentMethod`; `Renewal`: `componentId`).
+Podem precisar de ajuste fino com captura real.
+
+## Outros endpoints mapeados (referência, não expostos)
 
 `catalogs/plans/clients/v3`, `catalogs/plans/v3`, `extracts/internet/period/{p}`,
-`extracts/call/period/{p}/component/{c}`, `coupons/wallet`, `renewals/v2`,
-`retention/*`, `purchases/*`, `migrations/*`, `mgm/*`, `roaming/*`. POSTs
-sensíveis exigem `x-hashcash` e/ou `x-auth-pwd`.
+`extracts/daily|call/period/{p}/component/{c}`, `coupons/*`, `credit_cards/*`
+(f4/b.java — cadastro/troca de cartão), `pix/purchase/{id}/status`,
+`adherence/purchase/pix`, `migrations/*`, `roaming/*`, `shopping-cart`,
+`purchase-limit`. A lista completa (~110 endpoints, verbo + path + retorno +
+headers) foi extraída de `f4/a.java` e `f4/b.java`.

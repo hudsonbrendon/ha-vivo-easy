@@ -27,11 +27,34 @@ Instalação manual: copie `custom_components/vivo_easy` para o seu
   com volume restante como estado e volume total / renovação / cashback nos
   atributos. Ilimitado reporta estado vazio.
 - **Carteira** — soma dos créditos (BRL), com detalhe de cada crédito.
+- **Saldo extra** — overbalance em reais.
 - **Cupons** — quantidade disponível + flag de não vistos.
-- **Easy Prime** — plano, próxima cobrança, expiração da assinatura.
+- **Easy Prime** — plano (com preço), próxima cobrança, expiração.
+- **Titular** — nome, email, CPF mascarado, plano.
+- **Renovações automáticas** — quantidade + lista (componentId para os serviços).
+- **Indique e ganhe** — código e usos.
+- **Notificações** e **Compras do mês** (total gasto).
 - **Linha ativa** (binary sensor) — status/estrangeiro/FWA nos atributos.
 
-Atualização a cada 30 min (cloud polling).
+Atualização a cada 30 min (cloud polling); os reads complementares são
+best-effort (se um falhar, o resto continua).
+
+## Ações (serviços)
+
+Expostos em Ferramentas do desenvolvedor → Serviços. As sensíveis mandam o
+`x-auth-pwd` automaticamente; as irreversíveis exigem `confirmar: true`.
+
+| Serviço | O que faz |
+|---|---|
+| `vivo_easy.comprar_pacote` | Compra um pacote (`offer_id` do catálogo, `coupon_code` opcional) |
+| `vivo_easy.ativar_renovacao` / `cancelar_renovacao` | Liga/desliga renovação automática (`component_id`) |
+| `vivo_easy.renovar_prime` / `reativar_prime` | Renova/reativa o Easy Prime |
+| `vivo_easy.avaliar_app` | Avalia o app (1–5) |
+| `vivo_easy.agendar_cancelamento_linha` | Agenda cancelamento (requer `confirmar`) |
+| `vivo_easy.cancelar_linha` | Cancela a linha — **irreversível** (requer `confirmar`) |
+
+> ⚠️ Compras/renovações gastam créditos ou cobram no cartão. Cancelamentos
+> mexem na sua linha. Use com cuidado.
 
 ## Desenvolvimento
 

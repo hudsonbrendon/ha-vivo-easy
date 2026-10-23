@@ -21,15 +21,81 @@
   },
   "entity": {
     "sensor": {
-      "consumption": { "name": "Consumo" },
-      "wallet": { "name": "Carteira" },
-      "coupons": { "name": "Cupons" },
-      "prime_plan": { "name": "Plano Easy Prime" },
-      "prime_next_charge": { "name": "Próxima cobrança" },
-      "prime_expiration": { "name": "Expiração da assinatura" }
+      "consumption": {
+        "name": "Consumo"
+      },
+      "wallet": {
+        "name": "Carteira"
+      },
+      "coupons": {
+        "name": "Cupons"
+      },
+      "prime_plan": {
+        "name": "Plano Easy Prime"
+      },
+      "prime_next_charge": {
+        "name": "Próxima cobrança"
+      },
+      "prime_expiration": {
+        "name": "Expiração da assinatura"
+      },
+      "client": {
+        "name": "Titular"
+      },
+      "overbalance": {
+        "name": "Saldo extra"
+      },
+      "renewals": {
+        "name": "Renovações automáticas"
+      },
+      "mgm": {
+        "name": "Indique e ganhe"
+      },
+      "notifications": {
+        "name": "Notificações"
+      },
+      "purchase_history": {
+        "name": "Compras do mês"
+      }
     },
     "binary_sensor": {
-      "line_active": { "name": "Linha ativa" }
+      "line_active": {
+        "name": "Linha ativa"
+      }
+    }
+  },
+  "services": {
+    "comprar_pacote": {
+      "name": "Comprar pacote",
+      "description": "Compra um pacote pelo offerId do catálogo."
+    },
+    "ativar_renovacao": {
+      "name": "Ativar renovação",
+      "description": "Ativa renovação automática de um componente."
+    },
+    "cancelar_renovacao": {
+      "name": "Cancelar renovação",
+      "description": "Desativa a renovação automática."
+    },
+    "renovar_prime": {
+      "name": "Renovar Easy Prime",
+      "description": "Renova a assinatura Easy Prime."
+    },
+    "reativar_prime": {
+      "name": "Reativar Easy Prime",
+      "description": "Reativa assinatura cancelada."
+    },
+    "avaliar_app": {
+      "name": "Avaliar o app",
+      "description": "Envia avaliação de 1 a 5 estrelas."
+    },
+    "agendar_cancelamento_linha": {
+      "name": "Agendar cancelamento",
+      "description": "Agenda o cancelamento da linha."
+    },
+    "cancelar_linha": {
+      "name": "Cancelar linha",
+      "description": "Cancela a linha (irreversível)."
     }
   }
 }

@@ -21,15 +21,81 @@
   },
   "entity": {
     "sensor": {
-      "consumption": { "name": "Consumption" },
-      "wallet": { "name": "Wallet" },
-      "coupons": { "name": "Coupons" },
-      "prime_plan": { "name": "Easy Prime plan" },
-      "prime_next_charge": { "name": "Next charge" },
-      "prime_expiration": { "name": "Subscription expiration" }
+      "consumption": {
+        "name": "Consumption"
+      },
+      "wallet": {
+        "name": "Wallet"
+      },
+      "coupons": {
+        "name": "Coupons"
+      },
+      "prime_plan": {
+        "name": "Easy Prime plan"
+      },
+      "prime_next_charge": {
+        "name": "Next charge"
+      },
+      "prime_expiration": {
+        "name": "Subscription expiration"
+      },
+      "client": {
+        "name": "Account holder"
+      },
+      "overbalance": {
+        "name": "Extra balance"
+      },
+      "renewals": {
+        "name": "Auto-renewals"
+      },
+      "mgm": {
+        "name": "Refer a friend"
+      },
+      "notifications": {
+        "name": "Notifications"
+      },
+      "purchase_history": {
+        "name": "Purchases this month"
+      }
     },
     "binary_sensor": {
-      "line_active": { "name": "Line active" }
+      "line_active": {
+        "name": "Line active"
+      }
+    }
+  },
+  "services": {
+    "comprar_pacote": {
+      "name": "Buy package",
+      "description": "Buys a package by catalog offerId."
+    },
+    "ativar_renovacao": {
+      "name": "Enable auto-renewal",
+      "description": "Enables auto-renewal of a component."
+    },
+    "cancelar_renovacao": {
+      "name": "Disable auto-renewal",
+      "description": "Disables auto-renewal."
+    },
+    "renovar_prime": {
+      "name": "Renew Easy Prime",
+      "description": "Renews the Easy Prime subscription."
+    },
+    "reativar_prime": {
+      "name": "Reactivate Easy Prime",
+      "description": "Reactivates a cancelled subscription."
+    },
+    "avaliar_app": {
+      "name": "Rate the app",
+      "description": "Sends a 1-5 star rating."
+    },
+    "agendar_cancelamento_linha": {
+      "name": "Schedule cancellation",
+      "description": "Schedules line cancellation."
+    },
+    "cancelar_linha": {
+      "name": "Cancel line",
+      "description": "Cancels the line (irreversible)."
     }
   }
 }

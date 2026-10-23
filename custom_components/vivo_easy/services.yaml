@@ -1,0 +1,115 @@
+comprar_pacote:
+  name: Comprar pacote
+  description: Compra um pacote/oferta pelo offerId do catálogo (gasta créditos/cartão).
+  fields:
+    offer_id:
+      name: Offer ID
+      description: ID da oferta (veja atributos dos sensores de catálogo).
+      required: true
+      example: "INTERNET_1GB"
+      selector:
+        text:
+    coupon_code:
+      name: Cupom
+      description: Código de cupom opcional.
+      selector:
+        text:
+    config_entry_id:
+      name: Linha
+      description: ID da entrada (só se tiver mais de uma linha).
+      selector:
+        text:
+
+ativar_renovacao:
+  name: Ativar renovação automática
+  description: Ativa a renovação automática de um componente.
+  fields:
+    component_id:
+      name: Component ID
+      description: componentId (veja o sensor de renovações).
+      required: true
+      selector:
+        text:
+    config_entry_id:
+      name: Linha
+      selector:
+        text:
+
+cancelar_renovacao:
+  name: Cancelar renovação automática
+  description: Desativa a renovação automática de um componente.
+  fields:
+    component_id:
+      name: Component ID
+      required: true
+      selector:
+        text:
+    config_entry_id:
+      name: Linha
+      selector:
+        text:
+
+renovar_prime:
+  name: Renovar Easy Prime
+  description: Renova a assinatura Easy Prime (cobrança no cartão).
+  fields:
+    config_entry_id:
+      name: Linha
+      selector:
+        text:
+
+reativar_prime:
+  name: Reativar Easy Prime
+  description: Reativa uma assinatura Easy Prime cancelada.
+  fields:
+    config_entry_id:
+      name: Linha
+      selector:
+        text:
+
+avaliar_app:
+  name: Avaliar o app
+  description: Envia uma avaliação de 1 a 5 estrelas.
+  fields:
+    stars:
+      name: Estrelas
+      required: true
+      selector:
+        number:
+          min: 1
+          max: 5
+          mode: slider
+    config_entry_id:
+      name: Linha
+      selector:
+        text:
+
+agendar_cancelamento_linha:
+  name: Agendar cancelamento da linha
+  description: AGENDA o cancelamento da linha. Requer confirmar.
+  fields:
+    confirmar:
+      name: Confirmar
+      description: Marque para confirmar esta ação sensível.
+      required: true
+      selector:
+        boolean:
+    config_entry_id:
+      name: Linha
+      selector:
+        text:
+
+cancelar_linha:
+  name: Cancelar linha (irreversível)
+  description: CANCELA a linha imediatamente. Ação irreversível. Requer confirmar.
+  fields:
+    confirmar:
+      name: Confirmar
+      description: Marque para confirmar o cancelamento irreversível.
+      required: true
+      selector:
+        boolean:
+    config_entry_id:
+      name: Linha
+      selector:
+        text:

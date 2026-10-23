@@ -11,6 +11,7 @@ from .api import VivoEasyApiClient
 from .const import CONF_MSISDN
 from .coordinator import VivoEasyDataUpdateCoordinator
 from .data import VivoEasyConfigEntry, VivoEasyData
+from .services import async_register_services
 
 PLATFORMS: list[Platform] = [Platform.SENSOR, Platform.BINARY_SENSOR]
 
@@ -34,6 +35,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: VivoEasyConfigEntry) -> 
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     entry.async_on_unload(entry.add_update_listener(_async_reload_entry))
+    async_register_services(hass)
     return True
 
 

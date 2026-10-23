@@ -26,6 +26,7 @@ _spec.loader.exec_module(_mod)
 generate_auth_token = _mod.generate_auth_token
 hash_msisdn = _mod.hash_msisdn
 solve_hashcash = _mod.solve_hashcash
+generate_hash = _mod.generate_hash
 
 
 def test_generate_auth_token() -> None:
@@ -51,8 +52,19 @@ def test_solve_hashcash() -> None:
         assert hashlib.sha256(sol.encode()).hexdigest().startswith("0" * n)
 
 
+def test_generate_hash_pbkdf2() -> None:
+    """x-auth-pwd: PBKDF2-HMAC-SHA1, 1000 iters, 64 bytes -> 128 hex chars."""
+    got = generate_hash("minhasenha")
+    expected = hashlib.pbkdf2_hmac(
+        "sha1", b"minhasenha", b"a,0,2,b,3,q,1,l,o,4,7,8,c,9,01,02", 1000, 64
+    ).hex()
+    assert got == expected
+    assert len(got) == 128
+
+
 if __name__ == "__main__":
     test_generate_auth_token()
     test_hash_msisdn_is_sha256_hex()
     test_solve_hashcash()
+    test_generate_hash_pbkdf2()
     print("todos os checks de crypto passaram")

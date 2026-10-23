@@ -45,13 +45,16 @@ class VivoEasyLineActiveSensor(VivoEasyEntity, BinarySensorEntity):
 
     @property
     def is_on(self) -> bool | None:
-        """True se a linha estiver ativa."""
+        """True se a linha estiver ativa.
+
+        Enum LineStatus.Status (RE): ADHERED/MIGRATED = ativa; CANCELLED,
+        SUSPENDED_THEFT, PENDING_*, ADHERING*, MIGRATING = inativa.
+        """
         line = self._line()
         status = line.get("status")
         if status is None:
             return None
-        # Status "ACTIVE"/"ATIVO" conta como ativo; qualquer outro, não.
-        return str(status).upper() in {"ACTIVE", "ATIVO", "ATIVA"}
+        return str(status).upper() in {"ADHERED", "MIGRATED"}
 
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
