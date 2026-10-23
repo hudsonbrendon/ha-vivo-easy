@@ -12,8 +12,8 @@
     },
     "error": {
       "cannot_connect": "Falha ao conectar no Vivo Easy.",
-      "invalid_auth": "Número ou senha inválidos.",
-      "unknown": "Erro inesperado."
+      "invalid_auth": "Login recusado pelo Vivo Easy: {error}",
+      "unknown": "Erro inesperado: {error}"
     },
     "abort": {
       "already_configured": "Essa linha já está configurada."

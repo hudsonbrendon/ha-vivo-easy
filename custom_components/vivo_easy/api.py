@@ -219,8 +219,16 @@ class VivoEasyApiClient:
                 continue
 
             if resp.status in (401, 403):
+                detail = ""
+                try:
+                    body = await resp.json()
+                    detail = body.get("text") or body.get("code") or ""
+                except (aiohttp.ClientError, ValueError):
+                    pass
                 resp.close()
-                msg = "autenticação do Vivo Easy falhou (401/403)"
+                msg = f"Vivo Easy recusou o login: {detail}".strip() if detail else (
+                    "autenticação do Vivo Easy falhou (401/403)"
+                )
                 raise VivoEasyApiAuthenticationError(msg)
             if resp.status >= 400:
                 text = await resp.text()

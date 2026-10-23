@@ -12,8 +12,8 @@
     },
     "error": {
       "cannot_connect": "Failed to connect to Vivo Easy.",
-      "invalid_auth": "Invalid number or password.",
-      "unknown": "Unexpected error."
+      "invalid_auth": "Vivo Easy rejected the login: {error}",
+      "unknown": "Unexpected error: {error}"
     },
     "abort": {
       "already_configured": "This line is already configured."

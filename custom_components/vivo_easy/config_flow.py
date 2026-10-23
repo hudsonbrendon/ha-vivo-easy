@@ -28,27 +28,31 @@ class VivoEasyConfigFlow(ConfigFlow, domain=DOMAIN):
     ) -> ConfigFlowResult:
         """Passo inicial: pede número da linha e senha."""
         errors: dict[str, str] = {}
+        placeholders: dict[str, str] = {"error": ""}
         if user_input is not None:
             msisdn = "".join(c for c in user_input[CONF_MSISDN] if c.isdigit())
+            password = user_input[CONF_PASSWORD].strip()
             try:
                 client = VivoEasyApiClient(
                     msisdn=msisdn,
-                    password=user_input[CONF_PASSWORD],
+                    password=password,
                     session=async_get_clientsession(self.hass),
                 )
                 await client.async_login()
-            except VivoEasyApiAuthenticationError:
+            except VivoEasyApiAuthenticationError as err:
                 errors["base"] = "invalid_auth"
+                placeholders["error"] = str(err)
             except VivoEasyApiCommunicationError:
                 errors["base"] = "cannot_connect"
-            except VivoEasyApiError:
+            except VivoEasyApiError as err:
                 errors["base"] = "unknown"
+                placeholders["error"] = str(err)
             else:
                 await self.async_set_unique_id(msisdn)
                 self._abort_if_unique_id_configured()
                 return self.async_create_entry(
                     title=f"Vivo Easy {msisdn}",
-                    data={CONF_MSISDN: msisdn, CONF_PASSWORD: user_input[CONF_PASSWORD]},
+                    data={CONF_MSISDN: msisdn, CONF_PASSWORD: password},
                 )
 
         return self.async_show_form(
@@ -60,4 +64,5 @@ class VivoEasyConfigFlow(ConfigFlow, domain=DOMAIN):
                 }
             ),
             errors=errors,
+            description_placeholders=placeholders,
         )
