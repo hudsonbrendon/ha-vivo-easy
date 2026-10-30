@@ -13,13 +13,17 @@ import pathlib
 import sys
 import types
 
-# aiohttp/async_timeout só são usados em runtime pela classe de cliente; para a
-# checagem de crypto, stubamos para rodar sem dependências do Home Assistant.
-for _name in ("aiohttp", "async_timeout"):
-    sys.modules.setdefault(_name, types.ModuleType(_name))
+# aiohttp só é usado em runtime pela classe de cliente; para a checagem de
+# crypto, stubamos para rodar sem dependências do Home Assistant.
+sys.modules.setdefault("aiohttp", types.ModuleType("aiohttp"))
 
 # Carrega só api.py (sem o __init__ do pacote, que depende do Home Assistant).
-_API = pathlib.Path(__file__).resolve().parent.parent / "custom_components" / "vivo_easy" / "api.py"
+_API = (
+    pathlib.Path(__file__).resolve().parent.parent
+    / "custom_components"
+    / "vivo_easy"
+    / "api.py"
+)
 _spec = importlib.util.spec_from_file_location("vivo_easy_api", _API)
 _mod = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_mod)

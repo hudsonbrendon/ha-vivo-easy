@@ -16,16 +16,18 @@ from .entity import VivoEasyEntity
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
-    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
     from .coordinator import VivoEasyDataUpdateCoordinator
     from .data import VivoEasyConfigEntry
+
+PARALLEL_UPDATES = 0
 
 
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: VivoEasyConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Cria os sensores a partir do primeiro refresh do coordinator."""
     coordinator = entry.runtime_data.coordinator
@@ -57,7 +59,7 @@ class VivoEasyConsumptionSensor(VivoEasyEntity, SensorEntity):
     def __init__(
         self, coordinator: VivoEasyDataUpdateCoordinator, product: str
     ) -> None:
-        """product = chave do mapa de consumo (ex: INTERNET)."""
+        """Product = chave do mapa de consumo (ex: INTERNET)."""
         super().__init__(coordinator)
         self._product = product
         self._attr_unique_id = f"{coordinator.client.msisdn}_consumo_{product.lower()}"
@@ -408,7 +410,7 @@ class VivoEasyPurchaseHistorySensor(VivoEasyEntity, SensorEntity):
             value = item.get("value") or item.get("price") or item.get("amount") or 0
             try:
                 total += float(value)
-            except (TypeError, ValueError):
+            except TypeError, ValueError:
                 continue
         return round(total, 2)
 

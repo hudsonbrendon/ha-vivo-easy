@@ -16,13 +16,13 @@ O certificate pinning do app é client-side e não se aplica aqui.
 
 from __future__ import annotations
 
+import asyncio
 import base64
 import hashlib
 import socket
 from typing import Any
 
 import aiohttp
-import async_timeout
 
 BASE_URL = "https://vivo.gateway.zup.me/easy/v3"
 
@@ -106,7 +106,7 @@ class VivoEasyApiClient:
         session: aiohttp.ClientSession,
         device_id: str = "home-assistant",
     ) -> None:
-        """msisdn = número da linha só com dígitos (ex: 5531999999999)."""
+        """Msisdn = número da linha só com dígitos (ex: 5531999999999)."""
         self._msisdn = "".join(c for c in msisdn if c.isdigit())
         self._password = password
         self._session = session
@@ -201,7 +201,7 @@ class VivoEasyApiClient:
             if hashcash:
                 headers["x-hashcash"] = hashcash
             try:
-                async with async_timeout.timeout(_TIMEOUT):
+                async with asyncio.timeout(_TIMEOUT):
                     resp = await self._session.request(
                         method, url, headers=headers, params=params, json=json
                     )
@@ -223,11 +223,13 @@ class VivoEasyApiClient:
                 try:
                     body = await resp.json()
                     detail = body.get("text") or body.get("code") or ""
-                except (aiohttp.ClientError, ValueError):
+                except aiohttp.ClientError, ValueError:
                     pass
                 resp.close()
-                msg = f"Vivo Easy recusou o login: {detail}".strip() if detail else (
-                    "autenticação do Vivo Easy falhou (401/403)"
+                msg = (
+                    f"Vivo Easy recusou o login: {detail}".strip()
+                    if detail
+                    else ("autenticação do Vivo Easy falhou (401/403)")
                 )
                 raise VivoEasyApiAuthenticationError(msg)
             if resp.status >= 400:
@@ -257,11 +259,11 @@ class VivoEasyApiClient:
         return await self._request("GET", f"clients/{self._msisdn}/status/v2")
 
     async def async_get_client(self) -> dict[str, Any]:
-        """clients -> perfil do cliente (nome, cpf, plano, email...)."""
+        """Clients -> perfil do cliente (nome, cpf, plano, email...)."""
         return await self._request("GET", "clients")
 
     async def async_get_renewals(self) -> dict[str, Any]:
-        """renewals -> renovações automáticas agendadas."""
+        """Renewals -> renovações automáticas agendadas."""
         return await self._request("GET", "renewals")
 
     async def async_get_overbalance(self) -> dict[str, Any]:
@@ -313,9 +315,7 @@ class VivoEasyApiClient:
 
     async def async_delete_renewal(self, component_id: str) -> Any:
         """DELETE renewals/{componentId} -> desativa a renovação automática."""
-        return await self._request(
-            "DELETE", f"renewals/{component_id}", auth_pwd=True
-        )
+        return await self._request("DELETE", f"renewals/{component_id}", auth_pwd=True)
 
     async def async_renew_prime(self) -> dict[str, Any]:
         """POST purchases/renew-prime -> renova a assinatura Easy Prime."""

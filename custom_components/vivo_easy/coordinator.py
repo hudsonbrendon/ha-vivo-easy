@@ -73,9 +73,7 @@ class VivoEasyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             ),
         }
         data: dict[str, Any] = {"dashboard": dashboard}
-        results = await asyncio.gather(
-            *complementary.values(), return_exceptions=True
-        )
+        results = await asyncio.gather(*complementary.values(), return_exceptions=True)
         for key, result in zip(complementary, results, strict=True):
             if isinstance(result, Exception):
                 LOGGER.debug("%s indisponível: %s", key, result)
