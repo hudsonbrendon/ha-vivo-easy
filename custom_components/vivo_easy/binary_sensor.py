@@ -13,16 +13,18 @@ from .entity import VivoEasyEntity
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
-    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
     from .coordinator import VivoEasyDataUpdateCoordinator
     from .data import VivoEasyConfigEntry
+
+PARALLEL_UPDATES = 0
 
 
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: VivoEasyConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Cria o binary sensor de linha ativa."""
     coordinator = entry.runtime_data.coordinator

@@ -9,10 +9,15 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import voluptuous as vol
-from homeassistant.core import HomeAssistant, ServiceCall, ServiceResponse, SupportsResponse
+from homeassistant.core import (
+    HomeAssistant,
+    ServiceCall,
+    ServiceResponse,
+    SupportsResponse,
+)
 from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
 from homeassistant.helpers import config_validation as cv
+import voluptuous as vol
 
 from .api import VivoEasyApiClient, VivoEasyApiError
 from .const import DOMAIN
@@ -65,12 +70,14 @@ def _require_confirm(call: ServiceCall) -> None:
         raise ServiceValidationError(msg)
 
 
-def async_register_services(hass: HomeAssistant) -> None:  # noqa: C901
+def async_setup_services(hass: HomeAssistant) -> None:
     """Registra os serviços do domínio (idempotente)."""
     if hass.services.has_service(DOMAIN, SERVICE_PURCHASE):
         return
 
-    async def _run(call: ServiceCall, coro_name: str, **kwargs: object) -> ServiceResponse:
+    async def _run(
+        call: ServiceCall, coro_name: str, **kwargs: object
+    ) -> ServiceResponse:
         client = _client(hass, call)
         try:
             result = await getattr(client, coro_name)(**kwargs)
@@ -145,10 +152,20 @@ def async_register_services(hass: HomeAssistant) -> None:  # noqa: C901
         schema=vol.Schema({**_ENTRY, vol.Required(ATTR_COMPONENT_ID): cv.string}),
         supports_response=SupportsResponse.OPTIONAL,
     )
-    reg(DOMAIN, SERVICE_RENEW_PRIME, renew_prime, schema=vol.Schema(_ENTRY),
-        supports_response=SupportsResponse.OPTIONAL)
-    reg(DOMAIN, SERVICE_REACTIVATE_PRIME, reactivate_prime, schema=vol.Schema(_ENTRY),
-        supports_response=SupportsResponse.OPTIONAL)
+    reg(
+        DOMAIN,
+        SERVICE_RENEW_PRIME,
+        renew_prime,
+        schema=vol.Schema(_ENTRY),
+        supports_response=SupportsResponse.OPTIONAL,
+    )
+    reg(
+        DOMAIN,
+        SERVICE_REACTIVATE_PRIME,
+        reactivate_prime,
+        schema=vol.Schema(_ENTRY),
+        supports_response=SupportsResponse.OPTIONAL,
+    )
     reg(
         DOMAIN,
         SERVICE_RATE_APP,
