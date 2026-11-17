@@ -10,7 +10,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import voluptuous as vol
-from homeassistant.core import HomeAssistant, ServiceCall, ServiceResponse, SupportsResponse
+from homeassistant.core import (
+    HomeAssistant,
+    ServiceCall,
+    ServiceResponse,
+    SupportsResponse,
+)
 from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
 from homeassistant.helpers import config_validation as cv
 
@@ -65,7 +70,7 @@ def _require_confirm(call: ServiceCall) -> None:
         raise ServiceValidationError(msg)
 
 
-def async_register_services(hass: HomeAssistant) -> None:  # noqa: C901
+def async_register_services(hass: HomeAssistant) -> None:
     """Registra os serviços do domínio (idempotente)."""
     if hass.services.has_service(DOMAIN, SERVICE_PURCHASE):
         return

@@ -1,4 +1,17 @@
+<p align="center">
+  <img src="custom_components/vivo_easy/brand/logo@2x.png" alt="Vivo Easy" height="128">
+</p>
+
 # Vivo Easy — Home Assistant
+
+[![Tests](https://github.com/hudsonbrendon/ha-vivo-easy/actions/workflows/tests.yml/badge.svg)](https://github.com/hudsonbrendon/ha-vivo-easy/actions/workflows/tests.yml)
+[![Hassfest](https://github.com/hudsonbrendon/ha-vivo-easy/actions/workflows/hassfest.yml/badge.svg)](https://github.com/hudsonbrendon/ha-vivo-easy/actions/workflows/hassfest.yml)
+[![HACS](https://github.com/hudsonbrendon/ha-vivo-easy/actions/workflows/validate.yml/badge.svg)](https://github.com/hudsonbrendon/ha-vivo-easy/actions/workflows/validate.yml)
+[![Release](https://img.shields.io/github/v/release/hudsonbrendon/ha-vivo-easy?sort=semver)](https://github.com/hudsonbrendon/ha-vivo-easy/releases)
+[![Downloads](https://img.shields.io/github/downloads/hudsonbrendon/ha-vivo-easy/total)](https://github.com/hudsonbrendon/ha-vivo-easy/releases)
+[![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://hacs.xyz/)
+[![Home Assistant](https://img.shields.io/badge/Home%20Assistant-2024.6.0%2B-18BCF2?logo=homeassistant&logoColor=white)](https://www.home-assistant.io/)
+[![License](https://img.shields.io/github/license/hudsonbrendon/ha-vivo-easy)](LICENSE)
 
 Integração não-oficial que traz os dados da sua linha **Vivo Easy** para o Home
 Assistant: consumo de internet/voz, gigas, carteira (bônus/cashback), cupons,
@@ -10,6 +23,9 @@ do protocolo em [`REVERSE_ENGINEERING.md`](REVERSE_ENGINEERING.md).
 > Projeto pessoal, sem vínculo com a Vivo/Telefônica. Use com a sua própria conta.
 
 ## Instalação (HACS)
+
+[![Abrir no HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=hudsonbrendon&repository=ha-vivo-easy&category=integration)
+[![Adicionar integração](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=vivo_easy)
 
 1. HACS → repositórios customizados → adicione `hudsonbrendon/ha-vivo-easy`
    (categoria *Integration*).
