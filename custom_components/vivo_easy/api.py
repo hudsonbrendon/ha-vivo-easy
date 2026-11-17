@@ -16,13 +16,13 @@ O certificate pinning do app é client-side e não se aplica aqui.
 
 from __future__ import annotations
 
+import asyncio
 import base64
 import hashlib
 import socket
 from typing import Any
 
 import aiohttp
-import async_timeout
 
 BASE_URL = "https://vivo.gateway.zup.me/easy/v3"
 
@@ -201,7 +201,7 @@ class VivoEasyApiClient:
             if hashcash:
                 headers["x-hashcash"] = hashcash
             try:
-                async with async_timeout.timeout(_TIMEOUT):
+                async with asyncio.timeout(_TIMEOUT):
                     resp = await self._session.request(
                         method, url, headers=headers, params=params, json=json
                     )

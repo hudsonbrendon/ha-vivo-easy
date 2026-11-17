@@ -1,0 +1,2 @@
+# Tests are pure-Python (no Home Assistant needed).
+pytest

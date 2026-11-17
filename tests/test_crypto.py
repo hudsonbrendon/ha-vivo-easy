@@ -13,9 +13,9 @@ import pathlib
 import sys
 import types
 
-# aiohttp/async_timeout só são usados em runtime pela classe de cliente; para a
+# aiohttp só é usados em runtime pela classe de cliente; para a
 # checagem de crypto, stubamos para rodar sem dependências do Home Assistant.
-for _name in ("aiohttp", "async_timeout"):
+for _name in ("aiohttp",):
     sys.modules.setdefault(_name, types.ModuleType(_name))
 
 # Carrega só api.py (sem o __init__ do pacote, que depende do Home Assistant).
