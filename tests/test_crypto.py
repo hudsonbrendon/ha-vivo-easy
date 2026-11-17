@@ -13,7 +13,7 @@ import pathlib
 import sys
 import types
 
-# aiohttp só é usados em runtime pela classe de cliente; para a
+# aiohttp só é usado em runtime pela classe de cliente; para a
 # checagem de crypto, stubamos para rodar sem dependências do Home Assistant.
 for _name in ("aiohttp",):
     sys.modules.setdefault(_name, types.ModuleType(_name))
